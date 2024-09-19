@@ -1,56 +1,97 @@
-# quan_ly_nhan_khau.py
-
-class NhanKhau:
-    def __init__(self, ho_ten, tuoi, dia_chi):
-        self.ho_ten = ho_ten
-        self.tuoi = tuoi
-        self.dia_chi = dia_chi
+class Citizen:
+    def __init__(self, id_number, name, age, address):
+        self.id_number = id_number
+        self.name = name
+        self.age = age
+        self.address = address
 
     def __str__(self):
-        return f'Họ tên: {self.ho_ten}, Tuổi: {self.tuoi}, Địa chỉ: {self.dia_chi}'
+        return f"ID: {self.id_number}, Name: {self.name}, Age: {self.age}, Address: {self.address}"
 
-
-class QuanLyNhanKhau:
+class CitizenManagement:
     def __init__(self):
-        self.danh_sach_nhan_khau = []
+        self.citizen_list = []
 
-    def them_nhan_khau(self, ho_ten, tuoi, dia_chi):
-        nhan_khau = NhanKhau(ho_ten, tuoi, dia_chi)
-        self.danh_sach_nhan_khau.append(nhan_khau)
-        print(f"Đã thêm: {nhan_khau}")
+    def add_citizen(self, id_number, name, age, address):
+        citizen = Citizen(id_number, name, age, address)
+        self.citizen_list.append(citizen)
+        print(f"Added citizen: {name}")
 
-    def xoa_nhan_khau(self, ho_ten):
-        self.danh_sach_nhan_khau = [nk for nk in self.danh_sach_nhan_khau if nk.ho_ten != ho_ten]
-        print(f"Đã xóa nhân khẩu tên {ho_ten}")
+    def remove_citizen(self, id_number):
+        for citizen in self.citizen_list:
+            if citizen.id_number == id_number:
+                self.citizen_list.remove(citizen)
+                print(f"Removed citizen with ID: {id_number}")
+                return
+        print("Citizen not found.")
 
-    def hien_thi_nhan_khau(self):
-        if not self.danh_sach_nhan_khau:
-            print("Không có nhân khẩu nào trong danh sách.")
+    def update_citizen(self, id_number, name=None, age=None, address=None):
+        for citizen in self.citizen_list:
+            if citizen.id_number == id_number:
+                if name:
+                    citizen.name = name
+                if age:
+                    citizen.age = age
+                if address:
+                    citizen.address = address
+                print(f"Updated citizen with ID: {id_number}")
+                return
+        print("Citizen not found.")
+
+    def search_citizen(self, id_number):
+        for citizen in self.citizen_list:
+            if citizen.id_number == id_number:
+                print("Citizen found:")
+                print(citizen)
+                return
+        print("Citizen not found.")
+
+    def list_citizens(self):
+        if not self.citizen_list:
+            print("No citizens in the list.")
         else:
-            for nk in self.danh_sach_nhan_khau:
-                print(nk)
+            print("List of citizens:")
+            for citizen in self.citizen_list:
+                print(citizen)
 
-
-if __name__ == "__main__":
-    qlnk = QuanLyNhanKhau()
+def menu():
+    cm = CitizenManagement()
     while True:
-        print("\n1. Thêm nhân khẩu")
-        print("2. Xóa nhân khẩu")
-        print("3. Hiển thị danh sách nhân khẩu")
-        print("4. Thoát")
-        chon = input("Chọn chức năng (1/2/3/4): ")
+        print("\n--- Citizen Management ---")
+        print("1. Add citizen")
+        print("2. Remove citizen")
+        print("3. Update citizen")
+        print("4. Search citizen")
+        print("5. List all citizens")
+        print("6. Exit")
+        choice = input("Enter your choice: ")
 
-        if chon == '1':
-            ho_ten = input("Nhập họ tên: ")
-            tuoi = input("Nhập tuổi: ")
-            dia_chi = input("Nhập địa chỉ: ")
-            qlnk.them_nhan_khau(ho_ten, tuoi, dia_chi)
-        elif chon == '2':
-            ho_ten = input("Nhập tên nhân khẩu cần xóa: ")
-            qlnk.xoa_nhan_khau(ho_ten)
-        elif chon == '3':
-            qlnk.hien_thi_nhan_khau()
-        elif chon == '4':
+        if choice == '1':
+            id_number = input("Enter ID number: ")
+            name = input("Enter name: ")
+            age = int(input("Enter age: "))
+            address = input("Enter address: ")
+            cm.add_citizen(id_number, name, age, address)
+        elif choice == '2':
+            id_number = input("Enter ID number to remove: ")
+            cm.remove_citizen(id_number)
+        elif choice == '3':
+            id_number = input("Enter ID number to update: ")
+            name = input("Enter new name (or leave empty): ")
+            age = input("Enter new age (or leave empty): ")
+            age = int(age) if age else None
+            address = input("Enter new address (or leave empty): ")
+            cm.update_citizen(id_number, name, age, address)
+        elif choice == '4':
+            id_number = input("Enter ID number to search: ")
+            cm.search_citizen(id_number)
+        elif choice == '5':
+            cm.list_citizens()
+        elif choice == '6':
+            print("Exiting...")
             break
         else:
-            print("Lựa chọn không hợp lệ, vui lòng chọn lại.")
+            print("Invalid choice. Please try again.")
+
+if __name__ == "__main__":
+    menu()
